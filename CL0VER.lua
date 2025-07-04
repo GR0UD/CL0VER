@@ -1,21 +1,16 @@
-local queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
-
-if queueteleport then
-    pcall(function()
-        queueteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/GR0UD/CL0VER/refs/heads/main/CL0VER.lua"))()')
-    end)
-end
-
 if getgenv().CL0VER then return warn("{CLØVER} already running") end
 getgenv().CL0VER = true
 
-print("{CLØVER} has connected successfully")
- 
-local HOTKEY     = getgenv().CL0VER_HOTKEY     or "R"
-local SPEED      = getgenv().CL0VER_SPEED      or 0
-local DELAY      = getgenv().CL0VER_DELAY      or 1.5
-local OFFSET     = getgenv().CL0VER_OFFSET     or -20
-local SERVER_HOP = getgenv().CL0VER_SERVERHOP  or false
+if not game:IsLoaded() then game.Loaded:Wait() end
+print("{CLØVER} connected successfully.")
+
+-- vars with fallbacks
+local HOTKEY     = getgenv().CL0VER_HOTKEY    or "R"
+local SPEED      = getgenv().CL0VER_SPEED     or 0
+local DELAY      = getgenv().CL0VER_DELAY     or 1.5
+local OFFSET     = getgenv().CL0VER_OFFSET    or -20
+local SERVER_HOP = getgenv().CL0VER_SERVERHOP or false
+
 
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
