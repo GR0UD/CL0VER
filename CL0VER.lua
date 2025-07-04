@@ -1,15 +1,12 @@
-if not getgenv().CL0VER_LOADED then
-    getgenv().CL0VER_LOADED = true
-
-    local queue = (syn and syn.queue_on_teleport) or (queue_on_teleport)
-    if queue then
-        pcall(function()
-            queue('warn("{CLØVER} re-loaded"); loadstring(game:HttpGet("https://raw.githubusercontent.com/GR0UD/CL0VER/main/CL0VER.lua"))()')
-        end)
-    end
+local queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
+if queueteleport then
+    pcall(function()
+        queueteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/GR0UD/CL0VER/main/CL0VER.lua"))()')
+    end)
 end
 
 if not game:IsLoaded() then game.Loaded:Wait() end
+
 if getgenv().CL0VER then return warn("{CLØVER} already running") end
 getgenv().CL0VER = true
 
