@@ -124,6 +124,30 @@ local function toggleAutoFarm(state)
     end
 end
 
+local AutoFarmIcon = player.PlayerGui.TopbarStandard.Holders.Left.Widget:Clone()
+AutoFarmIcon.IconButton.Menu.IconSpot.Contents.IconImage.IconImageScale.Value = 1
+AutoFarmIcon.Name = "AutoFarmIcon"
+AutoFarmIcon.Parent = player.PlayerGui.TopbarStandard.Holders.Left
+AutoFarmIcon.IconButton.Menu.IconSpot.Contents.IconImage.Image = "rbxassetid://73201553806855"
+
+local AutoFarmIconButton = AutoFarmIcon.IconButton.Menu.IconSpot.ClickRegion
+
+AutoFarmIconButton.MouseButton1Click:Connect(function()
+    _G.AutoFarm = not _G.AutoFarm
+    toggleAutoFarm(_G.AutoFarm)
+    print("Auto-farming toggled", _G.AutoFarm and "ON!" or "OFF!")
+    AutoFarmIcon.IconButton.Menu.IconSpot.IconOverlay.Visible = true
+    AutoFarmIcon.IconButton.Menu.IconSpot.Contents.IconImage.Image = (_G.AutoFarm and "rbxassetid://97248123880891") or "rbxassetid://73201553806855"
+end)
+
+AutoFarmIconButton.MouseEnter:Connect(function()
+    AutoFarmIcon.IconButton.Menu.IconSpot.IconOverlay.Visible = true
+end)
+
+AutoFarmIconButton.MouseLeave:Connect(function()
+    AutoFarmIcon.IconButton.Menu.IconSpot.IconOverlay.Visible = false
+end)
+
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
     if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode.Name == HOTKEY then
