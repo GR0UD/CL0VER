@@ -4,7 +4,7 @@ if not getgenv().CL0VER_LOADED then
     local queue = (syn and syn.queue_on_teleport) or (queue_on_teleport)
     if queue then
         pcall(function()
-            queue('loadstring(game:HttpGet("https://raw.githubusercontent.com/GR0UD/CL0VER/refs/heads/main/CL0VER.lua"))()')
+            queue('warn("{CLØVER} re-loaded"); loadstring(game:HttpGet("https://raw.githubusercontent.com/GR0UD/CL0VER/main/CL0VER.lua"))()')
         end)
     end
 end
