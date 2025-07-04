@@ -133,6 +133,6 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode.Name == HOTKEY then
         _G.AutoFarm = not _G.AutoFarm
         toggleAutoFarm(_G.AutoFarm)
-        print("{CL0VER} toggled", _G.AutoFarm and "ON" or "OFF")
+        print("{CLØVER} toggled", _G.AutoFarm and "ON" or "OFF")
     end
 end)
