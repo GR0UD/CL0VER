@@ -159,7 +159,8 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode.Name == HOTKEY then
         _G.AutoFarm = not _G.AutoFarm
         toggleAutoFarm(_G.AutoFarm)
-        print("{CL0VER} toggled", _G.AutoFarm and "ON" or "OFF")
         AutoFarmIcon.IconButton.Menu.IconSpot.IconOverlay.Visible = true
+        AutoFarmIcon.IconButton.Menu.IconSpot.Contents.IconImage.Image = (_G.AutoFarm and "rbxassetid://97248123880891") or "rbxassetid://73201553806855"
+        print("{CL0VER} toggled", _G.AutoFarm and "ON" or "OFF")
     end
 end)
