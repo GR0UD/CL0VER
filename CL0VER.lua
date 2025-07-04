@@ -8,7 +8,6 @@ if queueteleport then
     end)
 end
 
-if not game:IsLoaded() then game.Loaded:Wait() end
 if getgenv().CL0VER then return warn("{CLØVER} already running") end
 getgenv().CL0VER = true
 
