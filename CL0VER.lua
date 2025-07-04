@@ -1,8 +1,13 @@
--- Bruh
-
 if not game:IsLoaded() then game.Loaded:Wait() end
-if getgenv().CL0VER then return warn("{CL0VER} already running") end
-getgenv().CL0VER = true
+
+local q = syn and syn.queue_on_teleport or fluxus and fluxus.queue_on_teleport or queue_on_teleport
+if q then
+    q(('loadstring(game:HttpGet("%s"))()'):format("https://raw.githubusercontent.com/GR0UD/CL0VER/refs/heads/main/CL0VER.lua"))
+end
+
+if getgenv().CL0VER then
+    return warn("{CL0VER} already running")
+end; getgenv().CL0VER = true
  
 local HOTKEY     = getgenv().CL0VER_HOTKEY     or "R"
 local SPEED      = getgenv().CL0VER_SPEED      or 0
