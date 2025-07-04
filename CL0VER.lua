@@ -65,7 +65,10 @@ local function setPromptBoost(state)
 end
 
 local function moveTo(part)
-    if not _G.AutoFarm then return end
+    if not _G.AutoFarm or not part or not part:IsA("BasePart") then
+        return
+    end
+
     local pos = part.Position + Vector3.new(0, OFFSET, 0)
     humanoid:ChangeState(Enum.HumanoidStateType.Flying)
     humanoidRootPart.CFrame = CFrame.new(pos) * CFrame.Angles(0, 0, math.rad(180))
