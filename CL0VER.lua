@@ -107,7 +107,7 @@ local function autoFarmLoop()
     end
 
     if not found and SERVER_HOP then
-        print("[CL0VER] No ambers found. Hopping servers...")
+        print("[CLØVER] No ambers found. Hopping servers...")
         task.wait(1)
         game:GetService("TeleportService"):Teleport(game.PlaceId)
     end
