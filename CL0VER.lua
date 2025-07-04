@@ -17,7 +17,7 @@ local HOTKEY     = getgenv().CL0VER_HOTKEY     or "R"
 local SPEED      = getgenv().CL0VER_SPEED      or 0
 local DELAY      = getgenv().CL0VER_DELAY      or 1.5
 local OFFSET     = getgenv().CL0VER_OFFSET     or -20
-local SERVER_HOP = getgenv().CL0VER_SERVERHOP  or true
+local SERVER_HOP = getgenv().CL0VER_SERVERHOP  or false
 
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
