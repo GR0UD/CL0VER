@@ -1,4 +1,4 @@
-if not game:IsLoaded() then game.Loaded:Wait() end
+if not game:IsLoaded() then game.Loaded:Wait() end; warn("{CLØVER} has connected successfully")
 
 local q = syn and syn.queue_on_teleport or fluxus and fluxus.queue_on_teleport or queue_on_teleport
 if q then
@@ -6,7 +6,7 @@ if q then
 end
 
 if getgenv().CL0VER then
-    return warn("{CL0VER} already running")
+    return warn("{CLØVER} already running")
 end; getgenv().CL0VER = true
  
 local HOTKEY     = getgenv().CL0VER_HOTKEY     or "R"
