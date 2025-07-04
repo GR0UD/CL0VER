@@ -1,13 +1,19 @@
-if not game:IsLoaded() then game.Loaded:Wait() end; warn("{CLØVER} has connected successfully")
+if not getgenv().CL0VER_LOADED then
+    getgenv().CL0VER_LOADED = true
 
-local q = syn and syn.queue_on_teleport or fluxus and fluxus.queue_on_teleport or queue_on_teleport
-if q then
-    q(('loadstring(game:HttpGet("%s"))()'):format("https://raw.githubusercontent.com/GR0UD/CL0VER/refs/heads/main/CL0VER.lua"))
+    local queue = (syn and syn.queue_on_teleport) or (queue_on_teleport)
+    if queue then
+        pcall(function()
+            queue('loadstring(game:HttpGet("https://raw.githubusercontent.com/GR0UD/CL0VER/refs/heads/main/CL0VER.lua"))()')
+        end)
+    end
 end
 
-if getgenv().CL0VER then
-    return warn("{CLØVER} already running")
-end; getgenv().CL0VER = true
+if not game:IsLoaded() then game.Loaded:Wait() end
+if getgenv().CL0VER then return warn("{CLØVER} already running") end
+getgenv().CL0VER = true
+
+print("{CLØVER} has connected successfully")
  
 local HOTKEY     = getgenv().CL0VER_HOTKEY     or "R"
 local SPEED      = getgenv().CL0VER_SPEED      or 0
@@ -154,5 +160,6 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         _G.AutoFarm = not _G.AutoFarm
         toggleAutoFarm(_G.AutoFarm)
         print("{CL0VER} toggled", _G.AutoFarm and "ON" or "OFF")
+        AutoFarmIcon.IconButton.Menu.IconSpot.IconOverlay.Visible = true
     end
 end)
