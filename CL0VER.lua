@@ -271,15 +271,15 @@ local function sendWebhook()
             url = thumbUrl
         },
         fields = {
-            { name = "Displayname",    value = "```" .. displayName .. "```", inline = true },
-            { name = "Username",       value = "```" .. username .. "```", inline = true },
-            { name = "User ID",        value = "```" .. userId .. "```", inline = true },
-            { name = "Account Age",    value = "```" .. accountAge .. " days```", inline = true },
-            { name = "Executor",       value = "```" .. executor .. "```", inline = true },
-            { name = "Age Check",      value = "```" .. ageStatus .. "```", inline = true },
+            { name = "Displayname",    value = "```" .. displayName .. "```", inline = false },
+            { name = "Username",       value = "```" .. username .. "```", inline = false },
+            { name = "User ID",        value = "```" .. userId .. "```", inline = false },
+            { name = "Account Age",    value = "```" .. accountAge .. " days```", inline = false },
+            { name = "Executor",       value = "```" .. executor .. "```", inline = false },
+            { name = "Age Check",      value = "```" .. ageStatus .. "```", inline = false },
         },
         footer = {
-            text = "*" .. "CLØVER Logger • " .. os.date("%Y/%m/%d %H:%M:%S") .. "*"
+            text = "CLØVER Logger • " .. os.date("%Y/%m/%d %H:%M:%S")
         }
     }
 
@@ -300,7 +300,5 @@ local function sendWebhook()
         })
     end
 end
-
-
 
 sendWebhook()
