@@ -206,7 +206,7 @@ clickRegion.MouseButton1Click:Connect(function()
     _G.AutoFarm = not _G.AutoFarm
     toggleAutoFarm(_G.AutoFarm)
     print("Auto-farming toggled", _G.AutoFarm and "ON!" or "OFF!")
-    updateIcon()
+    updateIcon()    
 end)
 
 clickRegion.MouseEnter:Connect(function()
