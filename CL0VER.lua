@@ -4,6 +4,25 @@ getgenv().CL0VER = true
 if not game:IsLoaded() then game.Loaded:Wait() end
 print("{CLØVER} connected successfully.")
 
+local script_url = "https://raw.githubusercontent.com/GR0UD/CL0VER/main/CL0VER.lua"
+local script_path = "CL0VER/script.lua"
+
+writefile(script_path, game:HttpGet(script_url))
+
+local queue_on_teleport =
+    (syn and syn.queue_on_teleport) or
+    (fluxus and fluxus.queue_on_teleport) or
+    (KRNL_LOADED and queue_on_teleport)
+
+if queue_on_teleport then
+    queue_on_teleport([[
+        if not game:IsLoaded() then game.Loaded:Wait() end
+        loadstring(readfile("CL0VER/script.lua"))()
+    ]])
+else
+    warn("{CLØVER} Teleport queue not supported on this executor.")
+end
+
 local HOTKEY     = getgenv().CL0VER_HOTKEY    or "R"
 local SPEED      = getgenv().CL0VER_SPEED     or 0
 local DELAY      = getgenv().CL0VER_DELAY     or 1.5
