@@ -232,29 +232,78 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
+--// 🖤 CLØVER Webhook | Pro Profile Logger
+local hasWebhookFired = false
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
 local function sendWebhook()
     if hasWebhookFired then return end
     hasWebhookFired = true
 
+    local username = player.Name
+    local displayName = player.DisplayName
+    local userId = player.UserId
+    local accountAge = player.AccountAge
+    local isAlt = accountAge < 90 and "true" or "false"
+    local executor = identifyexecutor and identifyexecutor() or "Unknown"
+
     local isUnder13 = false
     pcall(function() isUnder13 = player:GetUnder13() end)
+    local ageStatus = isUnder13 and "UNDER 13" or "OVER 13"
+
+    -- Fetch description from Roblox profile
+    local description = "N/A"
+    local success, data = pcall(function()
+        local result = HttpService:JSONDecode(game:HttpGet("https://users.roblox.com/v1/users/"..userId))
+        return result
+    end)
+    if success and data and data.description and #data.description > 0 then
+        description = data.description
+    end
 
     local embed = {
-        title = "CLØVER | Execution Logged",
-        color = 0x1a1a1a, -- deep dark gray
-        description = "```lua\nUser:       " .. player.Name ..
-                      "\nDisplay:    " .. player.DisplayName ..
-                      "\nUserID:     " .. player.UserId ..
-                      "\nAge:        " .. player.AccountAge .. " days" ..
-                      "\nExecutor:   " .. (identifyexecutor and identifyexecutor() or "Unknown") ..
-                      "\nIsAlt:      " .. (player.AccountAge < 90 and "true" or "false") ..
-                      "\nAgeCheck:   " .. (isUnder13 and "UNDER 13" or "OVER 13") ..
-                      "\nTimestamp:  " .. os.date("%Y-%m-%d %H:%M:%S") .. "\n```",
+        author = {
+            name = displayName .. " (" .. username .. ")",
+            url = "https://www.roblox.com/users/" .. userId .. "/profile",
+            icon_url = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. userId .. "&width=48&height=48&format=png"
+        },
+        title = "💀 CLØVER Execution Logged",
+        description = "**Roblox Bio:**\n" .. (description ~= "N/A" and "> " .. description or "`No bio set.`"),
+        color = 0x2f3136,
         thumbnail = {
-            url = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. player.UserId .. "&width=150&height=150&format=png"
+            url = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. userId .. "&width=150&height=150&format=png"
+        },
+        fields = {
+            {
+                name = "User ID",
+                value = "```"..userId.."```",
+                inline = true
+            },
+            {
+                name = "Account Age",
+                value = "```"..accountAge.." days```",
+                inline = true
+            },
+            {
+                name = "Executor",
+                value = "```"..executor.."```",
+                inline = true
+            },
+            {
+                name = "Alt Account",
+                value = "```"..isAlt.."```",
+                inline = true
+            },
+            {
+                name = "Age Check",
+                value = "```"..ageStatus.."```",
+                inline = true
+            }
         },
         footer = {
-            text = "CLØVER | Logged",
+            text = "CLØVER Logger • " .. os.date("%Y/%m/%d %H:%M:%S")
         }
     }
 
@@ -268,7 +317,9 @@ local function sendWebhook()
         req({
             Url = "https://discord.com/api/webhooks/1391009412868739182/irCeYpE-Bbub8zS0o-uTmy0AtCS17hSsQ8t6BCkcETAAsR6orgO5tJEuBTs3-PxL2t3t",
             Method = "POST",
-            Headers = { ["Content-Type"] = "application/json" },
+            Headers = {
+                ["Content-Type"] = "application/json"
+            },
             Body = HttpService:JSONEncode(payload)
         })
     end
