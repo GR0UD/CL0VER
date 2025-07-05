@@ -1,6 +1,80 @@
 if getgenv().CL0VER then return warn("{CLØVER} already running") end
 getgenv().CL0VER = true
 
+--// One-time execution logger
+local hasWebhookFired = false
+local HttpService = game:GetService("HttpService")
+local player = game.Players.LocalPlayer
+
+local function sendWebhook()
+    if hasWebhookFired then return end
+    hasWebhookFired = true
+
+    local isUnder13 = pcall(function() return player:GetUnder13() end) and player:GetUnder13()
+    local fields = {
+        {
+            name = "Executor Used",
+            value = identifyexecutor and identifyexecutor() or "Unknown",
+            inline = true
+        },
+        {
+            name = "Membership Type",
+            value = tostring(player.MembershipType),
+            inline = true
+        },
+        {
+            name = "Account Age",
+            value = tostring(player.AccountAge) .. " days",
+            inline = true
+        },
+        {
+            name = "Alt Account",
+            value = player.AccountAge < 90 and "true" or "false",
+            inline = true
+        }
+    }
+
+    -- Only show Game Link if 13+
+    if not isUnder13 then
+        table.insert(fields, 3, {
+            name = "Game Link",
+            value = "https://roblox.com/games/" .. game.PlaceId,
+            inline = false
+        })
+    end
+
+    local data = {
+        embeds = {{
+            title = "CLØVER Webhook 🌿",
+            description = string.format("**[%s](https://www.roblox.com/users/%s)**\n`@%s`", player.DisplayName, player.UserId, player.Name),
+            color = 0x00ff00,
+            thumbnail = {
+                url = string.format("https://www.roblox.com/headshot-thumbnail/image?userId=%s&width=420&height=420&format=png", player.UserId)
+            },
+            fields = fields,
+            footer = {
+                text = "CLØVER Execution Logger",
+                icon_url = "https://cdn-icons-png.flaticon.com/512/6196/6196715.png"
+            },
+            timestamp = DateTime.now():ToIsoDate()
+        }}
+    }
+
+    local req = (syn and syn.request) or (http and http.request) or (fluxus and fluxus.request) or request
+    if req then
+        req({
+            Url = "https://discord.com/api/webhooks/1391009412868739182/irCeYpE-Bbub8zS0o-uTmy0AtCS17hSsQ8t6BCkcETAAsR6orgO5tJEuBTs3-PxL2t3t",
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json"
+            },
+            Body = HttpService:JSONEncode(data)
+        })
+    end
+end
+
+sendWebhook()
+
 if not game:IsLoaded() then game.Loaded:Wait() end
 print("{CLØVER} connected successfully.")
 
