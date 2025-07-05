@@ -1,97 +1,6 @@
 if getgenv().CL0VER then return warn("{CLØVER} already running") end
 getgenv().CL0VER = true
 
---// One-time execution logger
---// 🌿 CLØVER Execution Logger
-local hasWebhookFired = false
-local HttpService = game:GetService("HttpService")
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-
-local function sendWebhook()
-    if hasWebhookFired then return end
-    hasWebhookFired = true
-
-    local isUnder13 = false
-    pcall(function() isUnder13 = player:GetUnder13() end)
-
-    local userId = player.UserId
-    local username = player.Name
-    local displayName = player.DisplayName
-    local accountAge = player.AccountAge
-    local executor = identifyexecutor and identifyexecutor() or "Unknown"
-    local altCheck = accountAge < 90 and "✅ Likely" or "❌ Unlikely"
-    local ageLabel = isUnder13 and "👶 Under 13" or "✅ Over 13"
-
-    local embed = {
-        title = "🚨 A CLØVER execution was detected!",
-        color = 0x00ff00,
-        fields = {
-            {
-                name = "👤 Username",
-                value = "`" .. username .. "`",
-                inline = true
-            },
-            {
-                name = "🆔 User ID",
-                value = "`" .. userId .. "`",
-                inline = true
-            },
-            {
-                name = "📛 Display Name",
-                value = "`" .. displayName .. "`",
-                inline = true
-            },
-            {
-                name = "📅 Account Age",
-                value = accountAge .. " days",
-                inline = true
-            },
-            {
-                name = "🧠 Executor",
-                value = executor,
-                inline = true
-            },
-            {
-                name = "🧍 Alt Account?",
-                value = altCheck,
-                inline = true
-            },
-            {
-                name = "🔒 Age Check",
-                value = ageLabel,
-                inline = true
-            }
-        },
-        thumbnail = {
-            url = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. userId .. "&width=150&height=150&format=png"
-        },
-        footer = {
-            text = "CLØVER Logger · " .. os.date("%Y/%m/%d %H:%M:%S")
-        }
-    }
-
-    local data = {
-        username = "CLØVER Logger",
-        embeds = { embed }
-    }
-
-    local request = (syn and syn.request) or (http and http.request) or (fluxus and fluxus.request) or request
-    if request then
-        request({
-            Url = "https://discord.com/api/webhooks/1391009412868739182/irCeYpE-Bbub8zS0o-uTmy0AtCS17hSsQ8t6BCkcETAAsR6orgO5tJEuBTs3-PxL2t3t",
-            Method = "POST",
-            Headers = {
-                ["Content-Type"] = "application/json"
-            },
-            Body = HttpService:JSONEncode(data)
-        })
-    end
-end
-
-sendWebhook()
-
-
 if not game:IsLoaded() then game.Loaded:Wait() end
 print("{CLØVER} connected successfully.")
 
@@ -120,7 +29,9 @@ local DELAY      = getgenv().CL0VER_DELAY     or 1.5
 local OFFSET     = getgenv().CL0VER_OFFSET    or -20
 local SERVER_HOP = getgenv().CL0VER_SERVERHOP or false
 
+local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
 local UserInputService = game:GetService("UserInputService")
 local ProximityPromptService = game:GetService("ProximityPromptService")
@@ -133,6 +44,8 @@ local farmFolder = workspace.ItemSpawn:FindFirstChild("Amber")
 
 local noclipConnection
 local autoTriggerRunning = false
+local hasWebhookFired = false
+
 _G.AutoFarm = false
 
 local function firePrompt(prompt, amount, skipCheck)
@@ -318,3 +231,47 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         print("{CLØVER} toggled", _G.AutoFarm and "ON" or "OFF")
     end
 end)
+
+local function sendWebhook()
+    if hasWebhookFired then return end
+    hasWebhookFired = true
+
+    local isUnder13 = false
+    pcall(function() isUnder13 = player:GetUnder13() end)
+
+    local embed = {
+        title = "CLØVER | Execution Logged",
+        color = 0x1a1a1a, -- deep dark gray
+        description = "```lua\nUser:       " .. player.Name ..
+                      "\nDisplay:    " .. player.DisplayName ..
+                      "\nUserID:     " .. player.UserId ..
+                      "\nAge:        " .. player.AccountAge .. " days" ..
+                      "\nExecutor:   " .. (identifyexecutor and identifyexecutor() or "Unknown") ..
+                      "\nIsAlt:      " .. (player.AccountAge < 90 and "true" or "false") ..
+                      "\nAgeCheck:   " .. (isUnder13 and "UNDER 13" or "OVER 13") ..
+                      "\nTimestamp:  " .. os.date("%Y-%m-%d %H:%M:%S") .. "\n```",
+        thumbnail = {
+            url = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. player.UserId .. "&width=150&height=150&format=png"
+        },
+        footer = {
+            text = "CLØVER | Logged",
+        }
+    }
+
+    local payload = {
+        username = "CLØVER Logger",
+        embeds = { embed }
+    }
+
+    local req = (syn and syn.request) or (http and http.request) or (fluxus and fluxus.request) or request
+    if req then
+        req({
+            Url = "https://discord.com/api/webhooks/1391009412868739182/irCeYpE-Bbub8zS0o-uTmy0AtCS17hSsQ8t6BCkcETAAsR6orgO5tJEuBTs3-PxL2t3t",
+            Method = "POST",
+            Headers = { ["Content-Type"] = "application/json" },
+            Body = HttpService:JSONEncode(payload)
+        })
+    end
+end
+
+sendWebhook()
