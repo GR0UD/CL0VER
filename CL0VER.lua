@@ -30,8 +30,10 @@ local OFFSET     = getgenv().CL0VER_OFFSET    or -20
 local SERVER_HOP = getgenv().CL0VER_SERVERHOP or false
 
 local RunService = game:GetService("RunService")
+local TeleportService = game:GetService("TeleportService")
 local UserInputService = game:GetService("UserInputService")
 local ProximityPromptService = game:GetService("ProximityPromptService")
+
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoidRootPart = character.PrimaryPart or character:FindFirstChild("HumanoidRootPart") or character:FindFirstChildWhichIsA("BasePart")
@@ -121,8 +123,22 @@ local function autoFarmLoop()
 
     if not found and SERVER_HOP then
         print("[CLØVER] No ambers found. Hopping servers...")
+
         task.wait(1)
-        game:GetService("TeleportService"):Teleport(game.PlaceId)
+
+        local queue_on_teleport =
+            (syn and syn.queue_on_teleport) or
+            (fluxus and fluxus.queue_on_teleport) or
+            (KRNL_LOADED and queue_on_teleport)
+
+        if queue_on_teleport then
+            queue_on_teleport([[
+                if not game:IsLoaded() then game.Loaded:Wait() end
+                loadstring(readfile("CL0VER/script.lua"))()
+            ]])
+        end
+
+       TeleportService:Teleport(game.PlaceId)
     end
 end
 
