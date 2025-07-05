@@ -4,13 +4,11 @@ getgenv().CL0VER = true
 if not game:IsLoaded() then game.Loaded:Wait() end
 print("{CLØVER} connected successfully.")
 
--- vars with fallbacks
 local HOTKEY     = getgenv().CL0VER_HOTKEY    or "R"
 local SPEED      = getgenv().CL0VER_SPEED     or 0
 local DELAY      = getgenv().CL0VER_DELAY     or 1.5
 local OFFSET     = getgenv().CL0VER_OFFSET    or -20
 local SERVER_HOP = getgenv().CL0VER_SERVERHOP or false
-
 
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -124,11 +122,47 @@ local function toggleAutoFarm(state)
     end
 end
 
+local topbar = player.PlayerGui.TopbarStandard.Holders.Left
+topbar.Widget.IconButton.Menu.IconSpot.Contents.IconImage.IconImageScale.Value = 1 -- icon resize
+
+local AutoFarmIcon = topbar.Widget:Clone()
+AutoFarmIcon.Name = "AutoFarmIcon"
+AutoFarmIcon.Parent = topbar
+
+local iconImage = AutoFarmIcon.IconButton.Menu.IconSpot.Contents.IconImage
+iconImage.Image = "rbxassetid://73201553806855"
+
+local clickRegion = AutoFarmIcon.IconButton.Menu.IconSpot.ClickRegion
+local iconOverlay = AutoFarmIcon.IconButton.Menu.IconSpot.IconOverlay
+
+-- Toggle logic
+local function updateIcon()
+    iconImage.Image = _G.AutoFarm and "rbxassetid://97248123880891" or "rbxassetid://73201553806855"
+    iconOverlay.Visible = true
+end
+
+clickRegion.MouseButton1Click:Connect(function()
+    _G.AutoFarm = not _G.AutoFarm
+    toggleAutoFarm(_G.AutoFarm)
+    print("Auto-farming toggled", _G.AutoFarm and "ON!" or "OFF!")
+    updateIcon()
+end)
+
+clickRegion.MouseEnter:Connect(function()
+    iconOverlay.Visible = true
+end)
+
+clickRegion.MouseLeave:Connect(function()
+    iconOverlay.Visible = false
+end)
+
+
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
     if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode.Name == HOTKEY then
         _G.AutoFarm = not _G.AutoFarm
         toggleAutoFarm(_G.AutoFarm)
+        AutoFarmIcon.IconButton.Menu.IconSpot.Contents.IconImage.Image = (_G.AutoFarm and "rbxassetid://97248123880891") or "rbxassetid://73201553806855"
         print("{CLØVER} toggled", _G.AutoFarm and "ON" or "OFF")
     end
 end)
