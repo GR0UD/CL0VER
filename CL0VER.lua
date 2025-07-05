@@ -122,23 +122,49 @@ local function autoFarmLoop()
     end
 
     if not found and SERVER_HOP then
-        print("[CLØVER] No ambers found. Hopping servers...")
+        print("[CLØVER] No ambers found. Searching for a new server...")
 
-        task.wait(1)
+        local HttpService = game:GetService("HttpService")
+        local TeleportService = game:GetService("TeleportService")
+        local PlaceId = game.PlaceId
+        local JobId = game.JobId
 
-        local queue_on_teleport =
-            (syn and syn.queue_on_teleport) or
-            (fluxus and fluxus.queue_on_teleport) or
-            (KRNL_LOADED and queue_on_teleport)
+        local servers = {}
+        local success, result = pcall(function()
+            return HttpService:JSONDecode(game:HttpGet(
+                "https://games.roblox.com/v1/games/" .. PlaceId .. "/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true"
+            ))
+        end)
 
-        if queue_on_teleport then
-            queue_on_teleport([[
-                if not game:IsLoaded() then game.Loaded:Wait() end
-                loadstring(readfile("CL0VER/script.lua"))()
-            ]])
+        if success and result and result.data then
+            for _, v in next, result.data do
+                if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers)
+                and v.playing < v.maxPlayers and v.id ~= JobId then
+                    table.insert(servers, v.id)
+                end
+            end
         end
 
-       TeleportService:Teleport(game.PlaceId)
+        if #servers > 0 then
+            local targetServer = servers[math.random(1, #servers)]
+
+            -- Queue script again
+            local queue_on_teleport =
+                (syn and syn.queue_on_teleport) or
+                (fluxus and fluxus.queue_on_teleport) or
+                (KRNL_LOADED and queue_on_teleport)
+
+            if queue_on_teleport then
+                queue_on_teleport([[
+                    if not game:IsLoaded() then game.Loaded:Wait() end
+                    loadstring(readfile("CL0VER/script.lua"))()
+                ]])
+            end
+
+            TeleportService:TeleportToPlaceInstance(PlaceId, targetServer, game.Players.LocalPlayer)
+        else
+            warn("[CLØVER] No suitable servers found.")
+        end
     end
 end
 
