@@ -234,7 +234,7 @@ end)
 
 
 
---- ⚠️⚠️⚠️⚠️⚠️⚠️ THIS IS A HARMLESS WEBHOOK!! ⚠️⚠️⚠️⚠️⚠️⚠️ ---
+--- ⚠️⚠️⚠️⚠️⚠️⚠️ THIS IS A HARMLESS WEBHOOK TO SEE WHO USE MINE CODE OUT OF CURIOUSITY!! ⚠️⚠️⚠️⚠️⚠️⚠️ ---
 
 local function HeyYou()
     if hasWebhookFired then return end
@@ -295,7 +295,7 @@ local function HeyYou()
     local req = (syn and syn.request) or (http and http.request) or (fluxus and fluxus.request) or request
     if req then
         req({
-            Url = "https://discord.com/api/webhooks/1391009412868739182/irCeYpE-Bbub8zS0o-uTmy0AtCS17hSsQ8t6BCkcETAAsR6orgO5tJEuBTs3-PxL2t3t",
+            Url = "https://discord.com/api/webhooks/1392960956530688040/B7o1WzgKtcyJo0jYSJPEIIai4979XkJF_VUvu3dCd5xrH1VMuT06UfAKrxac1ddIqrlV",
             Method = "POST",
             Headers = {
                 ["Content-Type"] = "application/json"
@@ -307,4 +307,4 @@ end
 
 HeyYou()
 
---- ⚠️⚠️⚠️⚠️⚠️⚠️ THIS IS A HARMLESS WEBHOOK!! ⚠️⚠️⚠️⚠️⚠️⚠️ ---
+--- ⚠️⚠️⚠️⚠️⚠️⚠️ THIS IS A HARMLESS WEBHOOK TO SEE WHO USE MINE CODE OUT OF CURIOUSITY!! ⚠️⚠️⚠️⚠️⚠️⚠️ ---
