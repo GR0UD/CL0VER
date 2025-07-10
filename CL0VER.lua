@@ -232,7 +232,11 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
-local function sendWebhook()
+
+
+--- ⚠️⚠️⚠️⚠️⚠️⚠️ THIS IS A HARMLESS WEBHOOK!! ⚠️⚠️⚠️⚠️⚠️⚠️ ---
+
+local function HeyYou()
     if hasWebhookFired then return end
     hasWebhookFired = true
 
@@ -301,4 +305,6 @@ local function sendWebhook()
     end
 end
 
-sendWebhook()
+HeyYou()
+
+--- ⚠️⚠️⚠️⚠️⚠️⚠️ THIS IS A HARMLESS WEBHOOK!! ⚠️⚠️⚠️⚠️⚠️⚠️ ---
