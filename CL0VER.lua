@@ -234,7 +234,7 @@ end)
 
 
 
---- ⚠️⚠️⚠️⚠️⚠️⚠️ THIS IS A HARMLESS WEBHOOK TO SEE WHO USE MINE CODE OUT OF CURIOUSITY!! ⚠️⚠️⚠️⚠️⚠️⚠️ ---
+--- ⚠️⚠️⚠️⚠️⚠️⚠️ THIS IS A HARMLESS WEBHOOK TO SEE WHO USE MY CODE OUT OF CURIOUSITY!! ⚠️⚠️⚠️⚠️⚠️⚠️ ---
 
 local function HeyYou()
     if hasWebhookFired then return end
@@ -307,4 +307,4 @@ end
 
 HeyYou()
 
---- ⚠️⚠️⚠️⚠️⚠️⚠️ THIS IS A HARMLESS WEBHOOK TO SEE WHO USE MINE CODE OUT OF CURIOUSITY!! ⚠️⚠️⚠️⚠️⚠️⚠️ ---
+--- ⚠️⚠️⚠️⚠️⚠️⚠️ THIS IS A HARMLESS WEBHOOK TO SEE WHO USE MY CODE OUT OF CURIOUSITY!! ⚠️⚠️⚠️⚠️⚠️⚠️ ---
