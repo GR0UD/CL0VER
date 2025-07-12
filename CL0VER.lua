@@ -120,8 +120,12 @@ local function autoFarmLoop()
     local found = false
     for _, prompt in ipairs(farmFolder:GetDescendants()) do
         if prompt:IsA("ProximityPrompt") and prompt.Enabled then
-            moveTo(prompt.Parent)
-            found = true
+            local part = prompt.Parent:FindFirstChildWhichIsA("BasePart")
+            if part then
+                moveTo(part)
+                found = true
+                break -- optional: stops at first match
+            end
         end
     end
 
