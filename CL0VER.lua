@@ -124,7 +124,6 @@ local function autoFarmLoop()
             if part then
                 moveTo(part)
                 found = true
-                break -- optional: stops at first match
             end
         end
     end
@@ -188,6 +187,10 @@ local function toggleAutoFarm(state)
                 task.wait(DELAY)
             end
         end)
+    else
+        if humanoidRootPart then
+            humanoidRootPart.Position = Vector3.new(-39, 443, 78)
+        end
     end
 end
 
