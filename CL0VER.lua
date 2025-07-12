@@ -189,13 +189,13 @@ local function toggleAutoFarm(state)
         end)
     else
         if humanoidRootPart then
-            humanoidRootPart.Position = Vector3.new(-39, 443, 78)
+            humanoidRootPart.CFrame = CFrame.new(-39, 443, 78)
         end
     end
 end
 
 local topbar = player.PlayerGui.TopbarStandard.Holders.Left
-topbar.Widget.IconButton.Menu.IconSpot.Contents.IconImage.IconImageScale.Value = 1 -- icon resize
+topbar.Widget.IconButton.Menu.IconSpot.Contents.IconImage.IconImageScale.Value = 1
 
 local AutoFarmIcon = topbar.Widget:Clone()
 AutoFarmIcon.Name = "AutoFarmIcon"
@@ -207,7 +207,6 @@ iconImage.Image = "rbxassetid://73201553806855"
 local clickRegion = AutoFarmIcon.IconButton.Menu.IconSpot.ClickRegion
 local iconOverlay = AutoFarmIcon.IconButton.Menu.IconSpot.IconOverlay
 
--- Toggle logic
 local function updateIcon()
     iconImage.Image = _G.AutoFarm and "rbxassetid://97248123880891" or "rbxassetid://73201553806855"
     iconOverlay.Visible = true
