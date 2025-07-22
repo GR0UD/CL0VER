@@ -238,7 +238,17 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
+-- anti afk!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+for _, v in pairs(getconnections(game:GetService("Players").LocalPlayer.Idled)) do
+    v:Disable()
+end
 
+game:GetService("Players").LocalPlayer.Idled:Connect(function()
+    local VirtualUser = game:GetService("VirtualUser")
+    VirtualUser:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+    task.wait(1)
+    VirtualUser:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+end)
 
 --- ⚠️⚠️⚠️⚠️⚠️⚠️ THIS IS A HARMLESS WEBHOOK TO SEE WHO USE MY CODE OUT OF CURIOUSITY!! ⚠️⚠️⚠️⚠️⚠️⚠️ ---
 
