@@ -29,6 +29,7 @@ local DELAY      = getgenv().CL0VER_DELAY     or 1.5
 local OFFSET     = getgenv().CL0VER_OFFSET    or -20
 local SERVER_HOP = getgenv().CL0VER_SERVERHOP or false
 
+local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
@@ -194,37 +195,58 @@ local function toggleAutoFarm(state)
     end
 end
 
-local topbar = player.PlayerGui.TopbarStandard.Holders.Left
-topbar.Widget.IconButton.Menu.IconSpot.Contents.IconImage.IconImageScale.Value = 1
+local function createIcon(targetParent)
+    local button = CoreGui.TopBarApp.TopBarApp.MenuIconHolder.TriggerPoint:Clone()
+    button.Name = "CLOVER"
+    button.Size = UDim2.new(0, 44, 0, 44)
+    button.Parent = targetParent
+    button.Background.ScalingIcon.Size = UDim2.new(0, 34, 0, 34)
+    button.Background.ScalingIcon.Image = _G.AutoFarm and "rbxassetid://97248123880891" or "rbxassetid://73201553806855"
+    button.Background.ScalingIcon.ImageRectOffset = Vector2.new(0, 0)
+    button.Background.ScalingIcon.ImageRectSize = Vector2.new(0, 0)
 
-local AutoFarmIcon = topbar.Widget:Clone()
-AutoFarmIcon.Name = "AutoFarmIcon"
-AutoFarmIcon.Parent = topbar
+	local function updateIcon()
+		button.Background.ScalingIcon.Image = _G.AutoFarm and "rbxassetid://97248123880891" or "rbxassetid://73201553806855"
+	end
 
-local iconImage = AutoFarmIcon.IconButton.Menu.IconSpot.Contents.IconImage
-iconImage.Image = "rbxassetid://73201553806855"
+	button.Background.MouseButton1Click:Connect(function()
+		_G.AutoFarm = not _G.AutoFarm
+		toggleAutoFarm(_G.AutoFarm)
+		updateIcon()
+		print("{CLOVER} toggled", _G.AutoFarm and "ON!" or "OFF!")
+	end)
 
-local clickRegion = AutoFarmIcon.IconButton.Menu.IconSpot.ClickRegion
-local iconOverlay = AutoFarmIcon.IconButton.Menu.IconSpot.IconOverlay
-
-local function updateIcon()
-    iconImage.Image = _G.AutoFarm and "rbxassetid://97248123880891" or "rbxassetid://73201553806855"
-    iconOverlay.Visible = true
+	updateIcon()
+    
+	return updateIcon
 end
 
-clickRegion.MouseButton1Click:Connect(function()
-    _G.AutoFarm = not _G.AutoFarm
-    toggleAutoFarm(_G.AutoFarm)
-    print("Auto-farming toggled", _G.AutoFarm and "ON!" or "OFF!")
-    updateIcon()    
-end)
+local updateIconFunction
 
-clickRegion.MouseEnter:Connect(function()
-    iconOverlay.Visible = true
-end)
+local success, err = pcall(function()
+	local playerGui = player:WaitForChild("PlayerGui", 3)
+	local topbar = playerGui:FindFirstChild("TopbarStandard")
 
-clickRegion.MouseLeave:Connect(function()
-    iconOverlay.Visible = false
+	if topbar then
+		local left = topbar:WaitForChild("Holders"):FindFirstChild("Left")
+		if left:FindFirstChild("CLOVER") then
+			left.CLOVER:Destroy()
+		end
+		updateIconFunction = createIcon(left)
+	else
+		local coreLeft = CoreGui.TopBarApp.TopBarApp.UnibarLeftFrame
+
+		if coreLeft:FindFirstChild("CLOVER") then
+			coreLeft.CLOVER:Destroy()
+		end
+
+		local stacked = coreLeft:FindFirstChild("StackedElements")
+		if stacked then
+			stacked:Destroy()
+		end
+
+		updateIconFunction = createIcon(coreLeft)
+	end
 end)
 
 
